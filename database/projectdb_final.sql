@@ -25,7 +25,6 @@ CREATE TABLE products (
     name_fr VARCHAR(80) NOT NULL,
     category VARCHAR(50) NOT NULL,
     description TEXT NULL,
-    image_url VARCHAR(255) NOT NULL DEFAULT 'assets/images/products/placeholder.svg',
     quantity INT UNSIGNED NOT NULL DEFAULT 0,
     price DECIMAL(10,2) NOT NULL,
     low_stock_threshold INT UNSIGNED NOT NULL DEFAULT 10,
@@ -66,16 +65,68 @@ CREATE TABLE reports (
     CONSTRAINT fk_reports_user FOREIGN KEY (generated_by) REFERENCES users(id) ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
+-- Users
 INSERT INTO users (username, email, password_hash, full_name, role) VALUES
-('admin', 'admin@lafruiterieglobal.local', '$2y$12$GXNmf.MYY.Z5VR6aIrukUuobiVuPHPnSwpCxpsSRbuTrXGGs8LqUa', 'Store Admin', 'owner'),
+('admin',    'admin@lafruiterieglobal.local',    '$2y$12$GXNmf.MYY.Z5VR6aIrukUuobiVuPHPnSwpCxpsSRbuTrXGGs8LqUa', 'Store Admin',    'owner'),
 ('employee', 'employee@lafruiterieglobal.local', '$2y$12$b/ftkeWRpX1BNLPOW.GTEOmfpuO6KvekN/AYLM6fiSnIe4XlaaQJi', 'Store Employee', 'employee');
 
-INSERT INTO products (name_en, name_fr, category, description, image_url, quantity, price, low_stock_threshold, max_stock_threshold) VALUES
-('Organic Bananas', 'Bananes biologiques', 'Fruits', 'Fresh organic bananas sold by bunch.', 'assets/images/products/placeholder.svg', 42, 1.29, 15, 120),
-('Red Apples', 'Pommes rouges', 'Fruits', 'Crisp red apples for daily grocery sales.', 'assets/images/products/placeholder.svg', 68, 0.99, 20, 150),
-('Whole Milk 2L', 'Lait entier 2L', 'Dairy', 'Two litre whole milk carton.', 'assets/images/products/placeholder.svg', 18, 4.49, 10, 60),
-('Greek Yogurt', 'Yogourt grec', 'Dairy', 'Plain Greek yogurt container.', 'assets/images/products/placeholder.svg', 8, 5.99, 12, 80),
-('Chicken Breast', 'Poitrine de poulet', 'Meat', 'Fresh chicken breast package.', 'assets/images/products/placeholder.svg', 24, 11.99, 8, 50),
-('Frozen Peas', 'Pois surgelés', 'Frozen', 'Frozen green peas bag.', 'assets/images/products/placeholder.svg', 36, 3.49, 10, 90),
-('Strawberry Jam', 'Confiture de fraises', 'Jarred Items', 'Sweet strawberry jam jar.', 'assets/images/products/placeholder.svg', 55, 4.25, 10, 75),
-('Corn Flakes', 'Flocons de maïs', 'Cereals', 'Breakfast cereal box.', 'assets/images/products/placeholder.svg', 31, 4.75, 10, 70);
+-- Snacks
+INSERT INTO products (name_en, name_fr, category, description, quantity, price, low_stock_threshold, max_stock_threshold) VALUES
+('KitKat',        'KitKat',               'Snacks', 'Classic KitKat chocolate wafer bar.',            45, 2.49, 12, 120),
+('Cheerios',      'Cheerios',             'Snacks', 'Whole grain oat cereal.',                        30, 5.99, 10,  90),
+('Lays Chips',    'Chips Lays',           'Snacks', 'Original salted potato chips.',                  40, 3.99, 10, 100),
+('Ruffles',       'Ruffles',              'Snacks', 'Ridged potato chips.',                           35, 3.99, 10, 100),
+('Doritos',       'Doritos',              'Snacks', 'Nacho cheese flavoured tortilla chips.',         38, 4.49, 10, 100),
+('Pista Cookies', 'Biscuits aux pistaches','Snacks','Crunchy pistachio cookies.',                    25,  3.49,  8,  80),
+('Super Cookies', 'Super Biscuits',       'Snacks', 'Assorted cream-filled cookies.',                30,  2.99,  8,  80),
+('Lollipops',     'Sucettes',             'Snacks', 'Assorted fruit-flavoured lollipops.',           60,  0.99, 15, 150),
+('Gum',           'Gomme',                'Snacks', 'Sugarless chewing gum pack.',                   50,  1.99, 15, 120),
+('Excel',         'Excel',                'Snacks', 'Peppermint chewing gum.',                       45,  1.49, 15, 120);
+
+-- Vegetables
+INSERT INTO products (name_en, name_fr, category, description, quantity, price, low_stock_threshold, max_stock_threshold) VALUES
+('Celery',        'Céleri',         'Vegetables', 'Fresh celery bunch.',              20, 2.49,  5, 60),
+('Green Onion',   'Oignon vert',    'Vegetables', 'Fresh green onion bunch.',         25, 1.49,  5, 60),
+('Coriander',     'Coriandre',      'Vegetables', 'Fresh coriander bunch.',           20, 1.29,  5, 50),
+('Parsley',       'Persil',         'Vegetables', 'Fresh flat-leaf parsley.',         20, 1.29,  5, 50),
+('Cucumber',      'Concombre',      'Vegetables', 'Field cucumber.',                  30, 1.99,  8, 70),
+('Carrots',       'Carottes',       'Vegetables', 'Fresh carrots by the pound.',      35, 1.79, 10, 80),
+('Spinach',       'Épinards',       'Vegetables', 'Baby spinach bag.',                20, 3.49,  5, 50),
+('Broccoli',      'Brocoli',        'Vegetables', 'Fresh broccoli crown.',            18, 2.99,  5, 50),
+('Bell Peppers',  'Poivrons',       'Vegetables', 'Mixed colour bell peppers.',       25, 2.49,  8, 60),
+('Green Chili',   'Piment vert',    'Vegetables', 'Fresh hot green chili peppers.',  30, 0.99,  8, 70);
+
+-- Fruits
+INSERT INTO products (name_en, name_fr, category, description, quantity, price, low_stock_threshold, max_stock_threshold) VALUES
+('Banana',      'Banane',     'Fruits', 'Fresh yellow bananas, sold by bunch.',  40, 1.49, 10, 100),
+('Apple',       'Pomme',      'Fruits', 'Crisp red or green apple.',             50, 0.99, 15, 120),
+('Pear',        'Poire',      'Fruits', 'Ripe Bartlett pear.',                  30, 1.29,  8,  80),
+('Peach',       'Pêche',      'Fruits', 'Sweet summer peach.',                  25, 1.49,  8,  70),
+('Grapes',      'Raisins',    'Fruits', 'Seedless grapes, per bunch.',          20, 3.99,  5,  60),
+('Strawberry',  'Fraise',     'Fruits', 'Fresh strawberry pint.',               18, 4.49,  5,  50),
+('Blueberry',   'Bleuet',     'Fruits', 'Fresh blueberry pint.',               15, 4.99,  5,  50),
+('Raspberry',   'Framboise',  'Fruits', 'Fresh raspberry half-pint.',           12, 4.99,  5,  40),
+('Blackberry',  'Mûre',       'Fruits', 'Fresh blackberry half-pint.',          14, 4.99,  5,  40),
+('Orange',      'Orange',     'Fruits', 'Navel orange.',                        45, 0.99, 10, 100);
+
+-- Dairy
+INSERT INTO products (name_en, name_fr, category, description, quantity, price, low_stock_threshold, max_stock_threshold) VALUES
+('Cheese - Petit Québec',    'Fromage - Petit Québec',      'Dairy', 'Aged cheddar from Petit Québec.',        25, 5.99,  8, 60),
+('Mozzarella',               'Mozzarella',                  'Dairy', 'Fresh mozzarella block.',                20, 4.99,  8, 60),
+('Feta',                     'Féta',                        'Dairy', 'Crumbled feta cheese.',                  18, 4.99,  5, 50),
+('Milk (3.25%)',              'Lait (3,25%)',                'Dairy', 'Whole milk, 2L carton.',                 30, 4.49, 10, 80),
+('Milk (2%)',                 'Lait (2%)',                   'Dairy', 'Partly skimmed milk, 2L carton.',        35, 4.29, 10, 80),
+('Yogurt - Astro',           'Yogourt - Astro',             'Dairy', 'Astro original plain yogurt.',           20, 5.49,  8, 60),
+('Yogurt - Hallal/Khaas',    'Yogourt - Hallal/Khaas',     'Dairy', 'Halal certified yogurt.',                15, 5.49,  8, 50),
+('Paneer',                   'Paneer',                      'Dairy', 'Fresh homestyle paneer block.',          12, 6.99,  5, 40),
+('Cooking Cream',            'Crème à cuisson',             'Dairy', '35% cooking cream, 473ml.',              18, 3.99,  5, 50),
+('Drumsticks',               'Cornets Drumstick',           'Dairy', 'Classic vanilla ice cream cones.',      24, 5.99,  8, 60),
+('KitKat Drumsticks',        'Cornets KitKat',              'Dairy', 'KitKat flavoured ice cream cones.',     20, 6.49,  8, 60);
+
+-- Meat
+INSERT INTO products (name_en, name_fr, category, description, quantity, price, low_stock_threshold, max_stock_threshold) VALUES
+('Chicken Breast',    'Poitrine de poulet', 'Meat', 'Fresh boneless skinless chicken breast.',  24, 11.99, 8, 50),
+('Whole Chicken',     'Poulet entier',      'Meat', 'Fresh whole chicken, approx. 1.5–2kg.',    15, 14.99, 5, 40),
+('Chicken Drumsticks','Pilons de poulet',   'Meat', 'Fresh chicken drumstick pack.',            20,  9.99, 6, 50),
+('Chicken Legs',      'Cuisses de poulet',  'Meat', 'Fresh chicken leg quarters.',              18, 10.99, 6, 45),
+('Ground Chicken',    'Poulet haché',       'Meat', 'Fresh lean ground chicken, per lb.',       22,  8.99, 8, 50);

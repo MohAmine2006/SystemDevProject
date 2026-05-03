@@ -37,7 +37,7 @@ class ProductRepository
 
     public function create(array $data): void
     {
-        $stmt = Database::getConnection()->prepare('INSERT INTO products (name_en, name_fr, category, description, image_url, quantity, price, low_stock_threshold, max_stock_threshold) VALUES (:name_en, :name_fr, :category, :description, :image_url, :quantity, :price, :low_stock_threshold, :max_stock_threshold)');
+        $stmt = Database::getConnection()->prepare('INSERT INTO products (name_en, name_fr, category, description, quantity, price, low_stock_threshold, max_stock_threshold) VALUES (:name_en, :name_fr, :category, :description, :quantity, :price, :low_stock_threshold, :max_stock_threshold)');
         $stmt->execute($this->clean($data));
     }
 
@@ -45,7 +45,7 @@ class ProductRepository
     {
         $clean = $this->clean($data);
         $clean['id'] = $id;
-        $stmt = Database::getConnection()->prepare('UPDATE products SET name_en=:name_en, name_fr=:name_fr, category=:category, description=:description, image_url=:image_url, quantity=:quantity, price=:price, low_stock_threshold=:low_stock_threshold, max_stock_threshold=:max_stock_threshold WHERE id=:id');
+        $stmt = Database::getConnection()->prepare('UPDATE products SET name_en=:name_en, name_fr=:name_fr, category=:category, description=:description, quantity=:quantity, price=:price, low_stock_threshold=:low_stock_threshold, max_stock_threshold=:max_stock_threshold WHERE id=:id');
         $stmt->execute($clean);
     }
 
@@ -75,14 +75,14 @@ class ProductRepository
 
     private function clean(array $data): array
     {
+        $nameEn = trim($data['name_en'] ?? '');
         return [
-            'name_en' => trim($data['name_en'] ?? ''),
-            'name_fr' => trim($data['name_fr'] ?? ''),
-            'category' => trim($data['category'] ?? 'Other'),
-            'description' => trim($data['description'] ?? ''),
-            'image_url' => trim($data['image_url'] ?? 'assets/images/products/placeholder.svg'),
-            'quantity' => max(0, (int)($data['quantity'] ?? 0)),
-            'price' => max(0.01, (float)($data['price'] ?? 0)),
+            'name_en'             => $nameEn,
+            'name_fr'             => trim($data['name_fr'] ?? '') ?: $nameEn,
+            'category'            => trim($data['category'] ?? 'Snacks'),
+            'description'         => trim($data['description'] ?? ''),
+            'quantity'            => max(0, (int)($data['quantity'] ?? 0)),
+            'price'               => max(0.01, (float)($data['price'] ?? 0)),
             'low_stock_threshold' => max(0, (int)($data['low_stock_threshold'] ?? 10)),
             'max_stock_threshold' => max(1, (int)($data['max_stock_threshold'] ?? 100)),
         ];
