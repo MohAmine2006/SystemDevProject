@@ -55,7 +55,8 @@ class ProductController
     public function update(Request $request, Response $response, array $args): Response
     {
         try {
-            $this->products->update((int)$args['id'], (array)$request->getParsedBody());
+            $userId = (int)($_SESSION['user']['id'] ?? 0);
+            $this->products->update((int)$args['id'], (array)$request->getParsedBody(), $userId);
             $_SESSION['flash'] = ['type' => 'success', 'message' => t('flash_updated')];
         } catch (\Throwable $e) {
             $_SESSION['flash'] = ['type' => 'error', 'message' => 'Could not update product: ' . $e->getMessage()];

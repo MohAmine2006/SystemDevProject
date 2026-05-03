@@ -41,12 +41,28 @@ class ProductRepository
         $stmt->execute($this->clean($data));
     }
 
-    public function update(int $id, array $data): void
+    public function update(int $id, array $data, int $userId = 0): void
     {
+        $old   = $this->find($id);
         $clean = $this->clean($data);
         $clean['id'] = $id;
+
         $stmt = Database::getConnection()->prepare('UPDATE products SET name_en=:name_en, name_fr=:name_fr, category=:category, description=:description, quantity=:quantity, price=:price, low_stock_threshold=:low_stock_threshold, max_stock_threshold=:max_stock_threshold WHERE id=:id');
         $stmt->execute($clean);
+
+        // Auto-record a sale when quantity is reduced
+        if ($old && $userId > 0 && (int)$clean['quantity'] < (int)$old['quantity']) {
+            $qtySold = (int)$old['quantity'] - (int)$clean['quantity'];
+            $sale = Database::getConnection()->prepare(
+                'INSERT INTO sales (product_id, sold_by, quantity_sold, price_at_sale) VALUES (:pid, :uid, :qty, :price)'
+            );
+            $sale->execute([
+                'pid'   => $id,
+                'uid'   => $userId,
+                'qty'   => $qtySold,
+                'price' => (float)$old['price'],
+            ]);
+        }
     }
 
     public function softDelete(int $id): void

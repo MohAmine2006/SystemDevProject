@@ -37,32 +37,32 @@ CREATE TABLE products (
     INDEX idx_products_stock (quantity, low_stock_threshold)
 ) ENGINE=InnoDB;
 
+CREATE TABLE reports (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    report_date DATE NOT NULL,
+    total_sales DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    total_products_sold INT NOT NULL DEFAULT 0,
+    pdf_filename VARCHAR(255) NULL,
+    generated_by INT UNSIGNED NOT NULL,
+    generated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_reports_date (report_date),
+    CONSTRAINT fk_reports_user FOREIGN KEY (generated_by) REFERENCES users(id) ON DELETE RESTRICT
+) ENGINE=InnoDB;
+
 CREATE TABLE sales (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     product_id INT UNSIGNED NOT NULL,
     sold_by INT UNSIGNED NOT NULL,
-    quantity_sold INT UNSIGNED NOT NULL,
+    report_id INT UNSIGNED NULL,
+    quantity_sold INT NOT NULL,
     price_at_sale DECIMAL(10,2) NOT NULL,
     sold_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_sales_product (product_id),
     INDEX idx_sales_user (sold_by),
     INDEX idx_sales_date (sold_at),
     CONSTRAINT fk_sales_product FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE RESTRICT,
-    CONSTRAINT fk_sales_user FOREIGN KEY (sold_by) REFERENCES users(id) ON DELETE RESTRICT
-) ENGINE=InnoDB;
-
-CREATE TABLE reports (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    report_date DATE NOT NULL,
-    total_items INT UNSIGNED NOT NULL DEFAULT 0,
-    total_products INT UNSIGNED NOT NULL DEFAULT 0,
-    total_inventory_value DECIMAL(10,2) NOT NULL DEFAULT 0.00,
-    pdf_filename VARCHAR(255) NULL,
-    generated_by INT UNSIGNED NOT NULL,
-    generated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    INDEX idx_reports_date (report_date),
-    INDEX idx_reports_user (generated_by),
-    CONSTRAINT fk_reports_user FOREIGN KEY (generated_by) REFERENCES users(id) ON DELETE RESTRICT
+    CONSTRAINT fk_sales_user FOREIGN KEY (sold_by) REFERENCES users(id) ON DELETE RESTRICT,
+    CONSTRAINT fk_sales_report FOREIGN KEY (report_id) REFERENCES reports(id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
 -- Users

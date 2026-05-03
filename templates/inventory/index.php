@@ -171,5 +171,6 @@ include __DIR__ . '/../layouts/app-nav.php';
 <?php endforeach; ?>
 <?php if ($isOwner) include __DIR__ . '/partials/add-modal.php'; ?>
 
-<button class="help-fab" type="button" title="Help">?</button>
+<?php include __DIR__ . '/../layouts/user-manual-modal.php'; ?>
+<button class="help-fab" data-open="userManualModal" type="button" title="Help">?</button>
 <?php include __DIR__ . '/../layouts/footer.php'; ?>

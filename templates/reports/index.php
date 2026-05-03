@@ -1,6 +1,7 @@
 <?php
 include __DIR__ . '/../layouts/header.php';
 use App\Config\Helpers;
+use App\Config\Lang;
 $activePage = 'reports';
 include __DIR__ . '/../layouts/app-nav.php';
 ?>
@@ -52,6 +53,62 @@ include __DIR__ . '/../layouts/app-nav.php';
         </form>
     </div>
 
+    <!-- Daily Sales Section -->
+    <div class="sales-card">
+        <div class="sales-card-heading">
+            <div>
+                <h3><?= t('sales_section') ?></h3>
+                <p class="sales-date-label"><?= date('M d, Y', strtotime($summary['date'])) ?></p>
+            </div>
+            <div class="sales-totals">
+                <div class="sales-total-item">
+                    <small><?= t('daily_revenue') ?></small>
+                    <strong class="green"><?= Helpers::money($salesTotals['total_revenue']) ?></strong>
+                </div>
+                <div class="sales-total-item">
+                    <small><?= t('daily_units') ?></small>
+                    <strong><?= (int)$salesTotals['total_units'] ?></strong>
+                </div>
+            </div>
+        </div>
+
+        <?php if (empty($sales)): ?>
+            <p class="no-sales"><?= t('no_sales') ?></p>
+        <?php else: ?>
+            <div class="sales-table-wrap">
+                <table class="inv-table">
+                    <thead>
+                        <tr>
+                            <th><?= t('col_product') ?></th>
+                            <th><?= t('col_category') ?></th>
+                            <th><?= t('col_qty_sold') ?></th>
+                            <th><?= t('col_sale_price') ?></th>
+                            <th><?= t('col_line_total') ?></th>
+                            <th><?= t('col_qty_remaining') ?></th>
+                            <th><?= t('col_staff') ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($sales as $s):
+                            $lineTotal   = (float)$s['quantity_sold'] * (float)$s['price_at_sale'];
+                            $productName = Lang::current() === 'fr' ? $s['name_fr'] : $s['name_en'];
+                        ?>
+                        <tr>
+                            <td class="td-name"><?= htmlspecialchars($productName) ?></td>
+                            <td><?= Lang::cat($s['category']) ?></td>
+                            <td><?= (int)$s['quantity_sold'] ?></td>
+                            <td><?= Helpers::money($s['price_at_sale']) ?></td>
+                            <td class="td-profit"><?= Helpers::money($lineTotal) ?></td>
+                            <td><?= (int)$s['qty_remaining'] ?></td>
+                            <td><?= htmlspecialchars($s['sold_by_name']) ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php endif; ?>
+    </div>
+
     <div class="howto-card">
         <h3><?= t('howto_title') ?></h3>
         <ol>
@@ -64,5 +121,6 @@ include __DIR__ . '/../layouts/app-nav.php';
 
 </div>
 
-<button class="help-fab" type="button" title="Help">?</button>
+<?php include __DIR__ . '/../layouts/user-manual-modal.php'; ?>
+<button class="help-fab" data-open="userManualModal" type="button" title="Help">?</button>
 <?php include __DIR__ . '/../layouts/footer.php'; ?>
