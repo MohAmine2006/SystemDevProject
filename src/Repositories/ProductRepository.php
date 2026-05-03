@@ -14,8 +14,8 @@ class ProductRepository
             $params['category'] = $category;
         }
         if ($search) {
-            $sql .= ' AND (name_en LIKE :search OR name_fr LIKE :search OR category LIKE :search)';
-            $params['search'] = '%' . $search . '%';
+            $sql .= ' AND (name_en LIKE :s1 OR name_fr LIKE :s2 OR category LIKE :s3)';
+            $params['s1'] = $params['s2'] = $params['s3'] = '%' . $search . '%';
         }
         $sql .= ' ORDER BY category, name_en';
         $stmt = Database::getConnection()->prepare($sql);

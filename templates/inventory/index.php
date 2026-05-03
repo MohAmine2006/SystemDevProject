@@ -99,7 +99,8 @@ include __DIR__ . '/../layouts/app-nav.php';
                     <span class="srch-icon">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                     </span>
-                    <input name="search" value="<?= htmlspecialchars($search) ?>" placeholder="<?= t('search_ph') ?>">
+                    <input id="searchInput" name="search" value="<?= htmlspecialchars($search) ?>" placeholder="<?= t('search_ph') ?>" autocomplete="off">
+                    <div class="search-suggestions" id="searchSuggestions"></div>
                 </div>
                 <div class="cat-select-wrap">
                     <select name="category" onchange="this.form.submit()">
@@ -173,4 +174,46 @@ include __DIR__ . '/../layouts/app-nav.php';
 
 <?php include __DIR__ . '/../layouts/user-manual-modal.php'; ?>
 <button class="help-fab" data-open="userManualModal" type="button" title="Help">?</button>
+<script>
+(function () {
+    var names = <?= json_encode(array_values(array_unique(array_map(
+        fn($p) => \App\Config\Lang::current() === 'fr' ? $p['name_fr'] : $p['name_en'],
+        $allProducts
+    )))) ?>;
+
+    var input  = document.getElementById('searchInput');
+    var box    = document.getElementById('searchSuggestions');
+    var form   = input ? input.closest('form') : null;
+    if (!input || !box) return;
+
+    input.addEventListener('input', function () {
+        var q = this.value.trim().toLowerCase();
+        box.innerHTML = '';
+        if (!q) { box.classList.remove('show'); return; }
+        var matches = names.filter(function (n) { return n.toLowerCase().indexOf(q) !== -1; }).slice(0, 8);
+        if (!matches.length) { box.classList.remove('show'); return; }
+        matches.forEach(function (name) {
+            var item = document.createElement('div');
+            item.className = 'suggest-item';
+            item.textContent = name;
+            item.addEventListener('mousedown', function (e) {
+                e.preventDefault();
+                input.value = name;
+                box.classList.remove('show');
+                form.submit();
+            });
+            box.appendChild(item);
+        });
+        box.classList.add('show');
+    });
+
+    input.addEventListener('blur', function () {
+        setTimeout(function () { box.classList.remove('show'); }, 150);
+    });
+
+    input.addEventListener('focus', function () {
+        if (this.value.trim() && box.children.length) box.classList.add('show');
+    });
+})();
+</script>
 <?php include __DIR__ . '/../layouts/footer.php'; ?>

@@ -27,6 +27,7 @@ class ProductController
 
         return $this->view->render($response, 'inventory/index.php', [
             'products'         => $filtered,
+            'allProducts'      => $allProducts,
             'categories'       => $this->products->categories(),
             'selectedCategory' => $query['category'] ?? 'All',
             'search'           => $query['search'] ?? '',
