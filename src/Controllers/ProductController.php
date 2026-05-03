@@ -45,7 +45,7 @@ class ProductController
     {
         try {
             $this->products->create((array)$request->getParsedBody());
-            $_SESSION['flash'] = ['type' => 'success', 'message' => 'Product added successfully.'];
+            $_SESSION['flash'] = ['type' => 'success', 'message' => t('flash_added')];
         } catch (\Throwable $e) {
             $_SESSION['flash'] = ['type' => 'error', 'message' => 'Could not add product: ' . $e->getMessage()];
         }
@@ -56,7 +56,7 @@ class ProductController
     {
         try {
             $this->products->update((int)$args['id'], (array)$request->getParsedBody());
-            $_SESSION['flash'] = ['type' => 'success', 'message' => 'Product updated successfully.'];
+            $_SESSION['flash'] = ['type' => 'success', 'message' => t('flash_updated')];
         } catch (\Throwable $e) {
             $_SESSION['flash'] = ['type' => 'error', 'message' => 'Could not update product: ' . $e->getMessage()];
         }
@@ -67,7 +67,7 @@ class ProductController
     {
         try {
             $this->products->softDelete((int)$args['id']);
-            $_SESSION['flash'] = ['type' => 'success', 'message' => 'Product deleted.'];
+            $_SESSION['flash'] = ['type' => 'success', 'message' => t('flash_deleted')];
         } catch (\Throwable $e) {
             $_SESSION['flash'] = ['type' => 'error', 'message' => 'Could not delete product: ' . $e->getMessage()];
         }

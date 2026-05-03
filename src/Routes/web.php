@@ -13,6 +13,16 @@ return function (App $app) {
     $app->post('/login', [AuthController::class, 'login']);
     $app->post('/logout', [AuthController::class, 'logout']);
 
+    // Language toggle — works on every page including login
+    $app->get('/lang/{code}', function ($req, $res, $args) {
+        $code = $args['code'];
+        if (in_array($code, ['en', 'fr'], true)) {
+            $_SESSION['lang'] = $code;
+        }
+        $referer = $req->getHeaderLine('Referer') ?: \App\Config\Helpers::url('/inventory');
+        return $res->withHeader('Location', $referer)->withStatus(302);
+    });
+
     $app->group('', function ($group) {
         $group->get('/inventory', [ProductController::class, 'index']);
         $group->post('/products/{id}/update', [ProductController::class, 'update']);

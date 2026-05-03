@@ -13,6 +13,12 @@ session_start();
 
 require __DIR__ . '/vendor/autoload.php';
 require __DIR__ . '/src/Support/PhpRenderer.php';
+require __DIR__ . '/src/Config/Lang.php';
+
+function t(string $key): string
+{
+    return \App\Config\Lang::get($key);
+}
 
 // Load .env without needing vlucas/phpdotenv, so it works like your Wampoon lab.
 $envFile = __DIR__ . '/.env';

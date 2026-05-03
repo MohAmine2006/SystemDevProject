@@ -22,7 +22,7 @@ class AuthController
         $user = $this->users->findByUsername(trim($data['username'] ?? ''));
 
         if (!$user || !password_verify($data['password'] ?? '', $user['password_hash'])) {
-            $_SESSION['error'] = 'Invalid username or password.';
+            $_SESSION['error'] = 'invalid_credentials';
             return $response->withHeader('Location', \App\Config\Helpers::url('/login'))->withStatus(302);
         }
 
