@@ -26,6 +26,12 @@ class AuthController
             return $response->withHeader('Location', \App\Config\Helpers::url('/login'))->withStatus(302);
         }
 
+        $selectedRole = trim($data['role_hint'] ?? '');
+        if ($selectedRole && $user['role'] !== $selectedRole) {
+            $_SESSION['error'] = 'role_mismatch';
+            return $response->withHeader('Location', \App\Config\Helpers::url('/login'))->withStatus(302);
+        }
+
         unset($_SESSION['error']);
         $_SESSION['user'] = [
             'id' => (int)$user['id'],

@@ -27,6 +27,7 @@ class Lang
             'role_owner_desc'        => 'Full access with analytics',
             'sign_in'                => 'Sign In',
             'invalid_credentials'    => 'Invalid username or password.',
+            'role_mismatch'          => 'Incorrect role selected for this account.',
 
             // Header
             'welcome'   => 'Welcome,',
@@ -187,6 +188,7 @@ class Lang
             'role_owner_desc'        => 'Accès complet avec analyses',
             'sign_in'                => 'Se connecter',
             'invalid_credentials'    => "Nom d'utilisateur ou mot de passe invalide.",
+            'role_mismatch'          => 'Rôle incorrect sélectionné pour ce compte.',
 
             // Header
             'welcome'   => 'Bienvenue,',
