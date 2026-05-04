@@ -20,7 +20,6 @@ function t(string $key): string
     return \App\Config\Lang::get($key);
 }
 
-// Load .env without needing vlucas/phpdotenv, so it works like your Wampoon lab.
 $envFile = __DIR__ . '/.env';
 if (file_exists($envFile)) {
     foreach (file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
